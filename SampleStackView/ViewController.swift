@@ -25,25 +25,36 @@
 import UIKit
 
 class ViewController: UIViewController {
+    // array with colors
     let colors: [UIColor] = [.red, .yellow, .green]
     
+    // stack view declaration
     lazy var stackView: UIStackView = {
         let stack = UIStackView()
         
         stack.translatesAutoresizingMaskIntoConstraints = false
+        // initial stack axis
         stack.axis = .horizontal
+        // this is how the arranged views will be aligned in stack
         stack.alignment = .center
+        // this is how views will be presented
         stack.distribution = .equalSpacing
+        // spacing between views
         stack.spacing = 13.0
         
         return stack
     }()
     
+    // declaration for the segmented control
     lazy var segmentedControl: UISegmentedControl = {
+        // declared with two items
         let control = UISegmentedControl(items: [".horizontal", ".vertical"])
         
+        // will use auto layout
         control.translatesAutoresizingMaskIntoConstraints = false
+        // select first segment 
         control.selectedSegmentIndex = 0
+        // add handler to segmented control
         control.addTarget(self, action: #selector(handler(_:)), for: .valueChanged)
         
         return control
@@ -66,9 +77,11 @@ class ViewController: UIViewController {
     }
     
     private func prepareView() {
+        // add views to the superview
         view.addSubview(segmentedControl)
         view.addSubview(stackView)
         
+        // activate constraints
         NSLayoutConstraint.activate([
             stackView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             stackView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
@@ -77,13 +90,16 @@ class ViewController: UIViewController {
             segmentedControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 13.0)
         ])
         
+        // add arranged views to stack view
         colors.forEach { (color) in
             let arrangedView = MyView(color: color)
             stackView.addArrangedSubview(arrangedView)
         }
     }
     
+    // segmented view's change value handler
     @objc func handler(_ sender: UISegmentedControl) {
+        // switch stack view axis between horizontal and vertical
         switch sender.selectedSegmentIndex {
         case 0:
             stackView.axis = .horizontal
